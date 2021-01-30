@@ -1,25 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useRef } from 'react';
+
+import UserForm from './components/UserForm';
+import { useLocalStorageState } from './hooks/useLocalStorageState';
+import { formRef } from './interfaces/formRef';
 
 function App() {
+  const formRef = useRef<formRef>();
+  const [count, setCount] = useLocalStorageState('count', 0);
+
+  const resetForm = () => {
+    if (formRef.current) {
+      formRef.current.clearState();
+    }
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className="app">
+        <h1>{ count }</h1>
+        <button onClick={() => setCount(count + 1)}>Click</button>
+      </div>
+      <hr/>
+      <div className="user-form-container">
+        <button style={{margin: '20px'}} onClick={resetForm}>
+          Reset
+        </button>
+        <UserForm ref={formRef}/>
+      </div>
+    </>
   );
 }
 
